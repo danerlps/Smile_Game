@@ -24,23 +24,19 @@ function reiniciar() {
 
 //função jogar novamente
 function jogarNovamente() {
-    jogar = true;//variável jogar volta a ser verdadeira
-    //armazenamos todas as div na variável divis (getElementsByTagName)
-    let divis = document.getElementsByTagName("div");
-    //percorremos todas as divs armazenadas
-    for (i = 0; i < divis.length; i++) {
-        //verificamos se são as divs com ids 0, 1, 2 ou 3
-        if (divis[i].id == 0 || divis[i].id == 1 || divis[i].id == 2 || divis[i].id == 3) {
-            //alteramos a classe css das divs (className)
-            divis[i].className = "inicial";
-            //remove qualquer imagem dentro da div
-            while (divis[i].firstChild) {
-                divis[i].removeChild(divis[i].firstChild);
-            }
-            //adiciona o texto original de volta
-            divis[i].textContent = divis[i].id;
+    jogar = true;
+    // Seleciona apenas as cartas dentro da linha1
+    const cartas = document.querySelectorAll('#linha1 > .inicial, #linha1 > .acertou, #linha1 > .errou');
+    cartas.forEach(carta => {
+        carta.className = "inicial";
+        // Remove qualquer imagem dentro da carta
+        while (carta.firstChild) {
+            carta.removeChild(carta.firstChild);
         }
-    }
+        // Adiciona o texto original de volta
+        carta.textContent = carta.id;
+    });
+    document.getElementById('mensagem-resultado').className = "mensagem-flutuante";
 }
 
 //função que atualiza o placar
@@ -89,6 +85,10 @@ function verifica(obj) {
         jogar = false;
         //incrementa as tentativas
         tentativas++;
+        
+        // Marca a carta escolhida
+        marcarCartaEscolhida(obj);
+
         //verifica se jogou 5 vezes
         if (tentativas == 5) {
             //oculta o botao joganovamente alterando a classe css
@@ -105,6 +105,7 @@ function verifica(obj) {
             acertou(obj);
             //incrementa o contador de acertos
             acertos++;
+            mostrarMensagemResultado(true);
         } else {
             //se errou a tentativa, chama a função errou para mostrar a imagem de erro
             errou(obj);
@@ -112,6 +113,7 @@ function verifica(obj) {
             const objSorteado = document.getElementById(sorteado);
             //chama a função acertou para mostrar a div onde está o Smile
             acertou(objSorteado);
+            mostrarMensagemResultado(false);
         }
         //chama a função que atualiza o placar
         atualizaPlacar(acertos, tentativas);
@@ -143,55 +145,23 @@ function marcarCartaEscolhida(carta) {
     carta.classList.add('carta-marcada');
 }
 
-// Modifique a função verifica para incluir as novas funcionalidades
-function verifica(obj) {
-    if (jogar) {
-        jogar = false;
-        tentativas++;
-        
-        // Marca a carta escolhida
-        marcarCartaEscolhida(obj);
-
-        if (tentativas == 5) {
-            btnJogarNovamente.className = 'invisivel';
-            btnReiniciar.className = 'visivel';
-        }
-        
-        let sorteado = Math.floor(Math.random() * 4);
-        
-        if (obj.id == sorteado) {
-            acertou(obj);
-            acertos++;
-            mostrarMensagemResultado(true);
-        } else {
-            errou(obj);
-            const objSorteado = document.getElementById(sorteado);
-            acertou(objSorteado);
-            mostrarMensagemResultado(false);
-        }
-        
-        atualizaPlacar(acertos, tentativas);
-    } else {
-        alert('Clique em "Jogar novamente"');
-    }
+// Exemplo de função corrigida para resetar cartas:
+function resetarCartas() {
+    // Seleciona apenas as cartas dentro da linha1
+    const cartas = document.querySelectorAll('#linha1 > .inicial, #linha1 > .acertou, #linha1 > .errou');
+    cartas.forEach(carta => {
+        carta.className = 'inicial';
+        carta.innerHTML = carta.id;
+    });
+    document.getElementById('mensagem-resultado').textContent = '';
+    document.getElementById('resposta').textContent = '';
 }
 
-// Modifique a função jogarNovamente para limpar as mensagens
-function jogarNovamente() {
-    jogar = true;
-    let divis = document.getElementsByTagName("div");
-    for (i = 0; i < divis.length; i++) {
-        if (divis[i].id == 0 || divis[i].id == 1 || divis[i].id == 2 || divis[i].id == 3) {
-            divis[i].className = "inicial";
-            divis[i].classList.remove('carta-marcada');
-            while (divis[i].firstChild) {
-                divis[i].removeChild(divis[i].firstChild);
-            }
-            divis[i].textContent = divis[i].id;
-        }
-    }
-    document.getElementById('mensagem-resultado').className = "mensagem-flutuante";
-}
+// No evento do botão "Jogar novamente":
+document.getElementById('joganovamente').onclick = function() {
+    resetarCartas();
+    // ...outros resets necessários...
+};
 
 //adiciona eventos aos botões
 btnJogarNovamente.addEventListener('click', jogarNovamente);

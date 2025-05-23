@@ -238,3 +238,39 @@ button:hover {
 .mensagem-flutuante.mostrar {
     animation: fadeOut 3s forwards;
 }
+
+/* Estilo para a imagem de fundo */
+.background-image {
+    background-image: url('/image/wallpaper.png'); /* Ajuste o caminho conforme a estrutura de pastas */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    
+}
+
+.titulo-com-gif {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0; /* Remova o gap padrão para controle manual */
+    /* Você pode adicionar margin-left/right no .gif-titulo para ajuste fino */
+}
+
+.gif-titulo {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    /* Removendo borda e sombra */
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    /* Permite ajuste preciso da posição */
+    margin-left: 10px; /* Ajuste conforme necessário */
+    margin-top: -20px;   /* Ajuste conforme necessário */
+    margin-bottom: 0px;/* Ajuste conforme necessário */
+    margin-right: 0px; /* Ajuste conforme necessário */
+    vertical-align: middle;
+    /* Você pode alterar os valores acima para posicionar o gif exatamente onde quiser */
+}
+
